@@ -3,6 +3,7 @@ package com.financeiro.service.common;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -45,8 +46,8 @@ public abstract class ServiceImpl<T, PK> {
 				"Objeto não encontrado! Id: " + id));
 	}
 	
-	public Page<T> findAll(Integer page, Integer pagePerLine, String direction, String orderBy) {
-		PageRequest pageRequest = PageRequest.of(page, pagePerLine, Direction.valueOf(direction), orderBy);
+	public Page<T> findAll(Pageable pageable) {
+		PageRequest pageRequest = PageRequest.of(pageable.getDefaultPageSize(), pageable.getMaxPageSize(), Direction.valueOf(pageable.getPrefix()), pageable.getQualifierDelimiter());
 		return entityDao.findAll(pageRequest);
 	}
 
